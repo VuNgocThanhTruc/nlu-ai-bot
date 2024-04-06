@@ -1,47 +1,38 @@
-import {
-    AiFillCaretDown,
-    AiFillCaretUp,
-    AiOutlineHistory,
-    AiOutlineHome,
-    AiOutlineMoneyCollect,
-    AiOutlineUser
-} from 'react-icons/ai';
-import { FaCog, FaOpencart } from 'react-icons/fa';
+import { IoMdAdd } from "react-icons/io";
 import { SidebarItem } from '../../models/SidebarItem';
-
 export const SidebarData: SidebarItem[] = [
+    // {
+    //     title: 'Overview',
+    //     path: '/overview',
+    //     icon: <AiOutlineHome />,
+    //     iconClosed: <AiFillCaretDown />,
+    //     iconOpened: <AiFillCaretUp />,
+    //     subnav: [
+    //         {
+    //             title: 'Users',
+    //             path: '/overview/users',
+    //             icon: <AiOutlineUser />
+    //         },
+    //         {
+    //             title: 'Revenue',
+    //             path: '/overview/revenue',
+    //             icon: <AiOutlineMoneyCollect />
+    //         }
+    //     ]
+    // },
     {
-        title: 'Overview',
-        path: '/overview',
-        icon: <AiOutlineHome />,
-        iconClosed: <AiFillCaretDown />,
-        iconOpened: <AiFillCaretUp />,
-        subnav: [
-            {
-                title: 'Users',
-                path: '/overview/users',
-                icon: <AiOutlineUser />
-            },
-            {
-                title: 'Revenue',
-                path: '/overview/revenue',
-                icon: <AiOutlineMoneyCollect />
-            }
-        ]
-    },
-    {
-        title: 'Order',
+        title: 'Cuộc trò truyện mới',
         path: '/order',
-        icon: <FaOpencart />
+        icon: <IoMdAdd />
     },
-    {
-        title: 'History',
-        path: '/history',
-        icon: <AiOutlineHistory />
-    },
-    {
-        title: 'Configurations',
-        path: '/configurations',
-        icon: <FaCog />
-    }
+    // {
+    //     title: 'History',
+    //     path: '/history',
+    //     icon: <AiOutlineHistory />
+    // },
+    // {
+    //     title: 'Configurations',
+    //     path: '/configurations',
+    //     icon: <FaCog />
+    // }
 ];

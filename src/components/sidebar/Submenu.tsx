@@ -11,15 +11,17 @@ const SidebarLink = styled(Link)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 3.75rem;
+    //height: 3.75rem
     font-size: 1.125rem;
     padding: 2rem;
     text-decoration: none;
     color: #ffffff;
+    border-radius: 10px;
 
     &:hover {
-        background-color: #1f1f1b;
-        border-left: 4px solid #6d44dc;
+        background-color: rgba(31, 31, 27, 0.81);
+        border-bottom: 4px solid #44903E;
+        
     }
 `;
 
