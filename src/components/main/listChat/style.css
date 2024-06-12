@@ -1,0 +1,36 @@
+.main {
+    min-height: calc(100vh - 4rem);
+    width: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.main img.logo {
+    width: 20px;
+}
+
+.main .list-chat{
+    overflow: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    width: 100%;
+    height: calc(100vh - 12rem);
+}
+
+.main .chat{
+    display: flex;
+    padding: 0.5rem;
+    max-width: calc(100vh - 10rem);
+}
+
+.main .chat.bot{
+}
+
+.main .chat.user{
+
+}
+
+.main .chat .left{
+    padding: 0 1rem;
+}

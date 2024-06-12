@@ -2,8 +2,8 @@ import React from "react";
 
 const Header = () =>{
     return (
-        <div className="mt-2 ">
-            <h6>Generate a Python hooks useLocalStorage</h6>
+        <div className="header mt-2">
+            <h4>Tiêu đề: Tìm hiểu về mô hình ngôn ngữ lớn</h4>
             <div>8 dialogues</div>
             <hr />
         </div>
