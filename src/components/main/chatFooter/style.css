@@ -1,0 +1,35 @@
+.main .chat-footer{
+    /* margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-self: center; */
+}
+
+.chat-footer .component{
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-radius: 0.5 rem;
+    width: 100%;
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid #000; }
+
+.chat-footer .component>input{
+    padding: 0.5rem;
+    width: 100%;
+    outline: none;
+    font-size: 20px;
+    border:none
+}
+
+.chat-footer button.send>img{
+    width: 50px;
+}
+
+.chat-footer>input, button.send{
+    background: transparent;
+    border: none;
+}
+
