@@ -1,5 +1,5 @@
 .main {
-    min-height: calc(100vh - 4rem);
+    height: calc(100vh - 2rem);
     width: 100vh;
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
     width: 20px;
 }
 
-.main .list-chat{
+.main .list-chat {
     overflow: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -18,19 +18,35 @@
     height: calc(100vh - 12rem);
 }
 
-.main .chat{
+.main .chat {
     display: flex;
     padding: 0.5rem;
-    max-width: calc(100vh - 10rem);
+    width: 100%;
 }
 
-.main .chat.bot{
+.main .chat.bot {}
+
+.main .chat.user {
+    flex-direction: row-reverse;
 }
 
-.main .chat.user{
-
+.main .chat.user .left {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
 }
 
-.main .chat .left{
+.main .chat.user .text {
+    background-color: #f4f4f4;
+    padding: 12px 20px;
+    border-radius: 12px;
+}
+
+.main .chat.user .left>h6 {
+    text-align: end;
+}
+
+.main .chat .left {
     padding: 0 1rem;
+    max-width: calc(100vh - 10rem);
 }
