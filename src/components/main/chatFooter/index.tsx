@@ -6,7 +6,7 @@ const ChatFooter = () =>{
     return (
         <div className="chat-footer">
             <div className="component">
-                <input type="text" className="text" placeholder="Nhập câu hỏi của bạn..."/>
+                <textarea className="text" placeholder="Nhập câu hỏi của bạn..."></textarea>
                 <button className="send"><img src={sendBtn} alt="" /></button>
             </div>
         </div>

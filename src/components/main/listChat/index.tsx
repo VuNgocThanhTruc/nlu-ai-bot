@@ -1,7 +1,6 @@
 import React from "react";
 import './style.css'
 import Chat from "./Chat";
-import userLogo from '../../../assests/user.svg'
 
 const ListChat = () => {
     return (
