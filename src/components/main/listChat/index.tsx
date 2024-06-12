@@ -1,20 +1,15 @@
 import React from "react";
-import NLUAILogo from '../../../assests/logo-nlu-ai.png'
-import userLogo from '../../../assests/user.svg'
 import './style.css'
+import Chat from "./Chat";
 
-const ListChat = () =>{
+const ListChat = () => {
     return (
         <div className="list-chat flex-grow-1">
-            <div className="chat bot">
-                <img className="logo" src={NLUAILogo} alt="" />
-                <p className="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente eaque labore facere, officia mollitia exercitationem minima animi similique magni voluptate dignissimos laborum delectus, corrupti ea. Asperiores vel labore unde ullam!</p>
-            </div>
+            <Chat user='user' text='Lorem ipsum dolor sit amet consectetur '/>
 
-            <div className="chat user">
-                <img className="logo" src={userLogo} alt="" />
-                <p className="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente eaque labore facere, officia mollitia exercitationem minima animi similique magni voluptate dignissimos laborum delectus, corrupti ea. Asperiores vel labore unde ullam!</p>
-            </div>
+            <Chat user='bot' text='Lorem ipsum dolor sit amet consectetur '/>
+
+            <Chat user='bot' text='Lorem ipsum dolor sit amet consectetur '/>
         </div>
     )
 }
