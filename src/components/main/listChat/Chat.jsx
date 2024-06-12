@@ -3,7 +3,7 @@ import NLUAILogo from '../../../assests/logo-nlu-ai.png'
 import userLogo from '../../../assests/user.svg'
 import './style.css'
 
-const Chat = ({ user,text }) => {
+const Chat = ({ user, text }) => {
 
     return (
         <div className={`chat ${user === 'user' ? 'user' : 'bot'}`}>
