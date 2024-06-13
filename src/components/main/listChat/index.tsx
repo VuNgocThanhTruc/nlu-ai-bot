@@ -1,15 +1,14 @@
 import React from "react";
 import './style.css'
 import Chat from "./Chat";
+import { ListChatProps } from "../../../utils/types";
 
-const ListChat = () => {
+const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => {
     return (
         <div className="list-chat flex-grow-1">
-            <Chat user='user' text='Lorem ipsum dolor sit amet consectetur '/>
-
-            <Chat user='bot' text='Lorem ipsum dolor sit amet consectetur '/>
-
-            <Chat user='bot' text='Lorem ipsum dolor sit amet consectetur '/>
+            {loading === false ? chats.map((chat, index) => (
+                <Chat key={index} user={chat.user} text={chat.text} />
+            )) : <div>Loading...</div>}
         </div>
     )
 }
