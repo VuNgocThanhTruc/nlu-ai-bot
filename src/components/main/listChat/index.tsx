@@ -2,8 +2,10 @@ import React from "react";
 import './style.css'
 import Chat from "./Chat";
 import { ListChatProps } from "../../../utils/types";
+import { useSelector } from "react-redux";
 
 const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => {
+
     return (
         <div className="list-chat flex-grow-1">
             {loading === false ? chats.map((chat, index) => (
