@@ -8,9 +8,9 @@ import { useSelector } from "react-redux";
 import { chats } from "../../../redux/selectors";
 
 const MainChat = () => {
-    const chatFromStore = useSelector(chats);
+    const chatsFromStore = useSelector(chats);
     const user: UserProps = { id: 1, role: 1, name: "user" }
-    const listChat: ListChatProps = { roomId: 1, loading: false, user: user, chats: chatFromStore }
+    const listChat: ListChatProps = { roomId: 1, loading: false, user: user, chats: chatsFromStore }
 
     return (
         <div className="main d-flex flex-column">
