@@ -20,7 +20,7 @@ const ChatFooter = () => {
         setText('')
 
         const data = { "input": newChat.text }
-        
+
         try {
             const response = await axios.post(`${API_FASTAPI.url}api/generate`, data);
 
@@ -41,11 +41,20 @@ const ChatFooter = () => {
         }
     }
 
+    const handleSubmitSend = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleButonSend()
+        }
+    }
+
+
     return (
         <div className="chat-footer">
             <div className="component">
-                <textarea className="text" placeholder="Nhập câu hỏi của bạn..." onChange={(e) => setText(e.target.value)} value={text}></textarea>
-                <button className="send" onClick={handleButonSend}><img src={sendBtn} alt="" /></button>
+                <textarea id="textarea" className="text" placeholder="Nhập câu hỏi của bạn..." onKeyDown={(e) => handleSubmitSend(e)} 
+            onChange={(e) => setText(e.target.value)} value={text}></textarea>
+                <button id="sendButton" className="send" onClick={handleButonSend}><img src={sendBtn} alt="" /></button>
             </div>
         </div>
     )
