@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { chats } from "../../../mock-data/mockData";
-import { ChatProps } from "../../../utils/types";
-import Chat from "./Chat";
-import { SyncLoader } from "react-spinners";
+import { chats } from "../../mock-data/mockData";
+import { ChatProps } from "../../utils/types";
 
 export const chatsSlice = createSlice({
     name: 'chats', //mapping parent
