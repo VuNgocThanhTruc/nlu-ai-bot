@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import './style.css'
 import Chat from "./Chat";
 import { ListChatProps } from "../../../utils/types";
+import { useSelector } from "react-redux";
+import { loadingResponse } from "../../../redux/selectors";
+import { SyncLoader } from "react-spinners";
 
 const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => {
     const endOfMessagesRef = useRef<HTMLDivElement>(null);
+    const loadingResponseChat = useSelector(loadingResponse);
 
     const scrollToBottom = () => {
         if (endOfMessagesRef.current) {
@@ -16,6 +20,8 @@ const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => 
         scrollToBottom();
     }, [chats]);
 
+    console.log(loadingResponseChat.status)
+
     return (
         <div className="list-chat flex-grow-1">
             {loading === false ? (
@@ -23,6 +29,16 @@ const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => 
                     {chats.map((chat, index) => (
                         <Chat key={index} user={chat.user} text={chat.text} />
                     ))}
+                    {
+                        loadingResponseChat.status === true ? <Chat user="bot" text={
+                            <SyncLoader
+                                color="#74b636"
+                                size={8}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                                speedMultiplier={1}
+                            />
+                        } /> : ""}
                     <div ref={endOfMessagesRef} />
                 </>
             ) : (
