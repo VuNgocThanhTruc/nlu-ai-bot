@@ -20,8 +20,6 @@ const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => 
         scrollToBottom();
     }, [chats]);
 
-    console.log(loadingResponseChat.status)
-
     return (
         <div className="list-chat flex-grow-1">
             {loading === false ? (

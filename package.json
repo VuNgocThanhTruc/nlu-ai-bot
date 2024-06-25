@@ -25,7 +25,8 @@
     "styled-components": "^6.1.8",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
-    "websocket": "^1.0.35"
+    "websocket": "^1.0.35",
+    "ws": "^8.17.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -53,5 +54,10 @@
   },
   "devDependencies": {
     "react-router-dom": "^6.22.3"
-  }
+  },
+  "description": "Name: Chat bot nlu-ai-bot  \r Tecnical: LLMs, HuggingFace, Typescript, FastAPI, PostreSQL  \r # Figma  \r Fine-tuning llm support answer own data  \r #### Light theme  \r ![image](https://github.com/VuNgocThanhTruc/nlu-ai-bot/assets/77735001/c4e484c6-7b80-48ca-977a-9a37b3a00fa7)  \r #### Dark theme  \r ![image](https://github.com/VuNgocThanhTruc/nlu-ai-bot/assets/77735001/b55d98a4-3698-41e2-b6c6-f2cb102f7ab5)",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
