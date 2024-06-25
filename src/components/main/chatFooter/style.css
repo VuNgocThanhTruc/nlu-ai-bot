@@ -29,3 +29,9 @@ button.send {
     background: transparent;
     border: none;
 }
+
+.chat-footer>input,
+button.send:disabled {
+    opacity: 0.5; 
+    pointer-events: none; 
+}
