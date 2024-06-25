@@ -7,10 +7,10 @@ const Chat = ({ user, text }) => {
 
     return (
         <div className={`chat ${user.name === 'user' ? 'user' : 'bot'}`}>
-            <div className="right">
+            <div className="left">
                 <img className="logo" src={user.name === 'user' ? userLogo : NLUAILogo} alt="" />
             </div>
-            <div className="left">
+            <div className="right">
                 <h6>{user.name === 'user' ? 'You' : 'NLU bot'}</h6>
                 <p className="text">{text}</p>
             </div>
