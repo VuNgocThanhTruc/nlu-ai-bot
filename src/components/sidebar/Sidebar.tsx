@@ -3,10 +3,10 @@ import React, { FC, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineMenuFold } from 'react-icons/ai';
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdOutlineDarkMode } from "react-icons/md";
+import { MdOutlineDarkMode, MdDataObject } from "react-icons/md";
 import { SidebarData } from './SidebarData';
 import Submenu from './Submenu';
-import imageChatLogo from "../../images/chat_logo.png";
+import imageChatLogo from "../../images/logo.png";
 import {
     Container,
     Nav,
@@ -31,6 +31,9 @@ const Sidebar: FC = () => {
 
                     <NavIcon to="#">
                         <MdOutlineDarkMode />
+                    </NavIcon>
+                    <NavIcon to="#">
+                        <MdDataObject />
                     </NavIcon>
                     <NavIcon to="#">
                         <IoSettingsOutline />
