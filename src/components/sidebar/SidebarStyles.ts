@@ -16,6 +16,14 @@ export const Nav = styled.div`
     height: 100vh;
     flex-direction: column;
     z-index: 2;
+
+    @media (max-width: 768px) {
+        width: 4rem;
+    }
+
+    @media (max-width: 480px) {
+        width: 3rem;
+    }
 `;
 
 export const LogoContainer = styled.div`
@@ -25,6 +33,14 @@ export const LogoContainer = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+
+    @media (max-width: 768px) {
+        height: 4rem;
+    }
+
+    @media (max-width: 480px) {
+        height: 3rem;
+    }
 `;
 
 export const SidebarNav = styled.div<{ sidebar: boolean }>`
@@ -40,6 +56,14 @@ export const SidebarNav = styled.div<{ sidebar: boolean }>`
     left: 5rem;
     z-index: 1;
     border-left: 2px solid #2d313a;
+
+    @media (max-width: 768px) {
+        left: 4rem;
+    }
+
+    @media (max-width: 480px) {
+        left: 3rem;
+    }
 `;
 
 export const NavIcon = styled(Link)`
@@ -50,15 +74,44 @@ export const NavIcon = styled(Link)`
     font-size: 2rem;
     margin-top: 2rem;
     color: inherit; // Ensure color is inherited from IconContext
+
+    @media (max-width: 768px) {
+        height: 4rem;
+        font-size: 1.75rem;
+    }
+
+    @media (max-width: 480px) {
+        height: 3rem;
+        font-size: 1.5rem;
+    }
 `;
 
 export const Logo = styled.img`
     width: 80%; /* Adjust width as needed */
     margin-top: 2rem;
     margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 `;
 
 export const SidebarWrap = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0 0.5rem;
+    }
 `;
