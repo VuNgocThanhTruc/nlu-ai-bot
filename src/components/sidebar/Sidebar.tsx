@@ -10,7 +10,6 @@ import imageChatLogo from "../../images/chat_logo.png";
 import {
     Container,
     Nav,
-    LogoContainer,
     SidebarNav,
     NavIcon,
     Logo,

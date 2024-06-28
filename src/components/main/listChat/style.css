@@ -30,7 +30,7 @@
     flex-direction: row-reverse;
 }
 
-.main .chat.user .left {
+.main .chat.user .right {
     display: flex;
     flex-direction: column;
     margin-left: auto;
@@ -42,11 +42,20 @@
     border-radius: 12px;
 }
 
-.main .chat.user .left>h6 {
+.main .chat.user .right>h6 {
     text-align: end;
 }
 
-.main .chat .left {
+.main .chat .right {
     padding: 0 1rem;
     max-width: calc(100vh - 10rem);
+}
+
+.main .chat .right {
+    padding: 0 1rem;
+    max-width: calc(100vh - 10rem);
+}
+
+.main .chat .right .text {
+    white-space: pre-wrap
 }
