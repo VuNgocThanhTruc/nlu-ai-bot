@@ -16,6 +16,9 @@ https://www.figma.com/file/PjwPSDENSuqjjSkz9Rx647/easy-chatgpt-ui-(Community)?ty
   Run project:  
   ### `npm start`
 
+  Run webserver: 
+  ### `node .\src\websocket\server.js`
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 

@@ -16,3 +16,10 @@ export interface ListChatProps {
     loading: boolean,
     error?: string //có thể generate or not
 }
+
+export interface RoomProps {
+    roomId: number,
+    userId: number,
+    createAt: Date,
+    updateAt: Date,
+}

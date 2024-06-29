@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import './style.css'
 import Chat from "./Chat";
 import { ListChatProps } from "../../../utils/types";
@@ -40,7 +40,13 @@ const ListChat: React.FC<ListChatProps> = ({ roomId, loading, user, chats }) => 
                     <div ref={endOfMessagesRef} />
                 </>
             ) : (
-                <div>Loading...</div>
+                <div><SyncLoader
+                    // color="#74b636"
+                    size={50}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    speedMultiplier={1}
+                /></div>
             )}
         </div>
     );
