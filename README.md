@@ -16,13 +16,15 @@ https://www.figma.com/file/PjwPSDENSuqjjSkz9Rx647/easy-chatgpt-ui-(Community)?ty
   Run project:  
   ### `npm start`
 
-  Run webserver: 
+  Run webserver fake (if run webserver backend fastapi -> Skip this step): 
   ### `node .\src\websocket\server.js`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Back-end (FastAPI)
+  Run server:
+  ### `uvicorn main:app --reload`
 
 ## Authors
 Vũ Ngọc Thanh Trúc  
