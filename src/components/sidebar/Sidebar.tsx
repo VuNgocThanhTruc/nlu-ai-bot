@@ -1,4 +1,3 @@
-// Sidebar.tsx
 import React, { FC, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineMenuFold } from 'react-icons/ai';
@@ -16,7 +15,11 @@ import {
     SidebarWrap
 } from './SidebarStyles'; // Importing the styled-components
 
-const Sidebar: FC = () => {
+interface SidebarProps {
+    onToggleComponent: () => void;
+}
+
+const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
     const [sidebar, setSidebar] = useState(true);
     const showSidebar = () => setSidebar(!sidebar);
 
@@ -32,7 +35,7 @@ const Sidebar: FC = () => {
                     <NavIcon to="#">
                         <MdOutlineDarkMode />
                     </NavIcon>
-                    <NavIcon to="#">
+                    <NavIcon to="#" onClick={onToggleComponent}>
                         <MdDataObject />
                     </NavIcon>
                     <NavIcon to="#">

@@ -51,9 +51,6 @@ export const SidebarNav = styled.div<{ sidebar: boolean }>`
     flex-direction: column;
     transform: ${({ sidebar }) => (sidebar ? 'translateX(0)' : 'translateX(-100%)')};
     transition: transform 0.3s ease-in-out;
-    position: fixed;
-    top: 0;
-    left: 5rem;
     z-index: 1;
     border-left: 2px solid #2d313a;
 
