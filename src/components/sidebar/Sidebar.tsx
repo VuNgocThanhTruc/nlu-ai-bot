@@ -1,4 +1,3 @@
-// Sidebar.tsx
 import React, { FC, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineMenuFold } from 'react-icons/ai';
@@ -19,7 +18,11 @@ import { roomsSelector } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { SidebarItem } from '../../model/SidebarItem';
 
-const Sidebar: FC = () => {
+interface SidebarProps {
+    onToggleComponent: () => void;
+}
+
+const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
     const [sidebar, setSidebar] = useState(true);
     const showSidebar = () => setSidebar(!sidebar);
     const RoomDataFromStore: SidebarItem[] = useSelector(roomsSelector);
@@ -36,7 +39,7 @@ const Sidebar: FC = () => {
                     <NavIcon to="#">
                         <MdOutlineDarkMode />
                     </NavIcon>
-                    <NavIcon to="#">
+                    <NavIcon to="#" onClick={onToggleComponent}>
                         <MdDataObject />
                     </NavIcon>
                     <NavIcon to="#">

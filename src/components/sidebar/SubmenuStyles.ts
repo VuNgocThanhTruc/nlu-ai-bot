@@ -47,11 +47,11 @@ export const SidebarLabel = styled.span`
 
 export const DropdownLink = styled(Link)`
     display: flex;
-    justify-content: flex-start;
+    //justify-content: flex-start;
     align-items: center;
     height: 3.75rem;
     font-size: 1.125rem;
-    padding-left: 3rem;
+    //padding-left: 3rem;
     text-decoration: none;
     color: #ffffff;
 
