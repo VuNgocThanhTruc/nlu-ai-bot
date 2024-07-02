@@ -19,7 +19,7 @@ export const FETCH_ROOM = (user_id: number, dispatch: any) => {
                     }
                     rooms.push(newRoom)
                 })
-            dispatch(roomsSlice.actions.loadRooms(rooms.reverse()));
+            dispatch(roomsSlice.actions.loadRooms(rooms));
         })
         .catch(error => {
             console.error('Error:', error);
@@ -28,12 +28,15 @@ export const FETCH_ROOM = (user_id: number, dispatch: any) => {
 
 // /rooms/
 export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
+    const dataRequest = {
+        id_user: data.user.id,
+        title: data.text
+    }
 
-    axios.post(`${API_FASTAPI.url}${path}`, data)
+    axios.post(`${API_FASTAPI.url}${path}`, dataRequest)
         .then(response => {
             if (response.status === 200) {
                 let room = response.data
-
                 const newRoom: SidebarItem = {
                     title: room.title,
                     path: `/rooms/${room.id}`,
@@ -41,8 +44,9 @@ export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
                     // createAt: new Date(),
                     // updateAt: new Date(),
                 }
-                dispatch(roomsSlice.actions.addRoom(newRoom));
                 dispatch(roomsSlice.actions.choosedRoom(room.id));
+                dispatch(roomsSlice.actions.addRoom(newRoom));
+                POST_CHAT(data, room.id, dispatch)
             }
         })
         .catch(error => {
@@ -76,27 +80,19 @@ export const FETCH_CHATS_BY_ROOM = (id_room: number, dispatch: any) => {
 }
 
 // /chats/
-export const POST_CHAT = (data: ChatProps, roomsSelected:number) => {
+export const POST_CHAT = (data: ChatProps, roomsSelected: number, dispatch: any) => {
     const dataRequest = {
         message: data.text,
         id_room: roomsSelected,
         id_user: data.user.id
-      }
-    
+    }
+
     axios.post(`${API_FASTAPI.url}/chats/`, dataRequest)
         .then(response => {
-            if (response.status === 200)
-                console.log(response.data);
+            response.status === 200 && data.user.id != 1 &&
+                FETCH_ROOM(data.user.id, dispatch)
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
-
-// export const FetchData = () => {
-//     const dispatch = useDispatch();
-
-//     return {
-//         fetchRoom: (user_id: number) => FETCH_ROOM(user_id, dispatch),
-//     };
-// };

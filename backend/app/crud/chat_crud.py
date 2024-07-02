@@ -1,11 +1,17 @@
 from sqlalchemy.orm import Session
-from app.models import chat_model
+from app.models import chat_model, room_model
 from app.schemas import chat_schema
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 
 def create_chat(db: Session, chat: chat_schema.ChatCreate):
     db_chat = chat_model.Chat(message=chat.message, id_room=chat.id_room, id_user=chat.id_user)
     db.add(db_chat)
+
+    room = db.query(room_model.Room).filter(room_model.Room.id == chat.id_room).first()
+    if room:
+        room.update_at = func.now()
+
     db.commit()
     db.refresh(db_chat)
     return db_chat
