@@ -6,7 +6,8 @@ export interface ChatProps {
 export interface UserProps {
     id: number,
     role: number,
-    name: string,
+    username: string
+    // password: string,
 }
 
 export interface ListChatProps {

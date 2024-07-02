@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import MainChat from "../../components/main/mainChat";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { FETCH_ROOM, USER_INFO } from "../../mock-data/mockData";
+import { USER_INFO } from "../../mock-data/mockData";
 import { PacmanLoader } from "react-spinners";
 import { CSSProperties } from "styled-components";
-import { SidebarData } from "../../components/sidebar/SidebarData";
+import { FETCH_ROOM } from "../../utils/FetchData";
+import { useDispatch } from "react-redux";
 
 const override: CSSProperties = {
     display: "block",
@@ -13,9 +14,11 @@ const override: CSSProperties = {
 };
 
 const Home = () => {
-    useEffect(()=>{
-        FETCH_ROOM(USER_INFO?.id, SidebarData)
-    },[USER_INFO?.id])
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        FETCH_ROOM(USER_INFO.id, dispatch);
+    }, [])
 
     return (
         USER_INFO?.id ?

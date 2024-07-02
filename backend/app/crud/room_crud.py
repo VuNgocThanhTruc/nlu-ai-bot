@@ -3,7 +3,7 @@ from app.models import room_model
 from app.schemas import room_schema
 
 def create_room(db: Session, room: room_schema.RoomCreate):
-    db_room = room_model.Room(id_user=room.id_user)
+    db_room = room_model.Room(id_user=room.id_user, title=room.title)
     db.add(db_room)
     db.commit()
     db.refresh(db_room)

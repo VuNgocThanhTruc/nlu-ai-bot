@@ -6,10 +6,11 @@ import { ListChatProps, UserProps } from "../../../utils/types";
 // import { chats } from "../../../mock-data/mockData";
 import { useSelector } from "react-redux";
 import { chats } from "../../../redux/selectors";
+import { USER_INFO } from "../../../mock-data/mockData";
 
 const MainChat = () => {
     const chatsFromStore = useSelector(chats);
-    const user: UserProps = { id: 1, role: 1, name: "user" }
+    const user: UserProps = USER_INFO
     const listChat: ListChatProps = { roomId: 1, loading: false, user: user, chats: chatsFromStore }
 
     return (

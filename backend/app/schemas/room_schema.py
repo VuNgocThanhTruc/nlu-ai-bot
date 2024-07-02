@@ -4,6 +4,7 @@ from datetime import datetime
 
 class RoomBase(BaseModel):
     id_user: int
+    title: str
 
 class RoomCreate(RoomBase):
     pass

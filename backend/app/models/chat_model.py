@@ -9,8 +9,8 @@ class Chat(Base):
     id = Column(Integer, primary_key=True, index=True)
     message = Column(String)
     id_room = Column(Integer, ForeignKey('rooms.id'))
-    create_at = Column(DateTime, default=func.now())
     id_user = Column(Integer, ForeignKey("users.id"))
+    create_at = Column(DateTime, default=func.now())
 
     user = relationship("User", back_populates="chats")
     room = relationship("Room", back_populates="chats")

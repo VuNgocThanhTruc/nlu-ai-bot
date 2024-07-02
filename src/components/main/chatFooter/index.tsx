@@ -1,18 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import sendBtn from '../../../assests/send-icon.svg'
 import "./style.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingResponseChatSlice } from "../../../redux/slices/loadingResponseChatSlice";
 import { ChatProps } from "../../../utils/types";
 import { API_FASTAPI } from '../../../utils/server_util'
 import axios from "axios";
 import { chatsSlice } from "../../../redux/slices/chatsSlice";
+import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
+import { USER_INFO } from "../../../mock-data/mockData";
+import { chats, roomsselectedSelector } from "../../../redux/selectors";
 
 const ChatFooter = () => {
     const [text, setText] = useState('')
     const dispatch = useDispatch()
     const [isTextEmpty, setIsTextEmpty] = useState(true);
     const ws = useRef<WebSocket | null>(null);
+    const roomsselected = useSelector(roomsselectedSelector);
+    const roomsselectedRef = useRef(roomsselected);
+
+    useEffect(() => {
+        roomsselectedRef.current = roomsselected;
+    }, [roomsselected]);
 
     useEffect(() => {
         ws.current = new WebSocket(API_FASTAPI.ws_server);
@@ -27,8 +36,16 @@ const ChatFooter = () => {
 
         ws.current.onmessage = (event) => {
             const newChat = JSON.parse(event.data);
+            let dataRoom = {
+                "id_user": USER_INFO.id,
+                "title": text
+            }
+
             dispatch(chatsSlice.actions.addChat(newChat));
+            chats.length == 0 && FETCH_POST_ROOM("/rooms/", dataRoom, dispatch)
+            POST_CHAT(newChat, roomsselectedRef.current)
         };
+
 
         return () => {
             ws.current?.close();
@@ -37,43 +54,51 @@ const ChatFooter = () => {
 
     const handleButonSend = async () => {
         const newChat: ChatProps = {
-            user: { id: 1, role: 1, name: "user" },
+            user: { id: USER_INFO.id, role: USER_INFO.role, username: USER_INFO.username },
             text: text
         }
 
         if (text.trim() !== '' && ws.current && ws.current.readyState === WebSocket.OPEN) {
             // Send chat to WebSocket server
             ws.current?.send(JSON.stringify(newChat));
+            let dataRoom = {
+                "id_user": USER_INFO.id,
+                "title": text
+            }
             setText('')
             setIsTextEmpty(true);
             const data = { "input": newChat.text }
             dispatch(loadingResponseChatSlice.actions.setLoadingResponse(true))
             setTimeout(() => {
-                ws.current?.send(JSON.stringify({
-                    user: { id: 1, role: 1, name: "bot" },
+                const newBotChat: ChatProps = {
+                    user: { id: 1, role: 0, username: "bot" },
                     text: "Đã tạo sinh văn bản thành công!"
-                }));
+                }
+                ws.current?.send(JSON.stringify(newBotChat));
                 dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
             }, 3000);
-            try {
-                const response = await axios.post(`${API_FASTAPI.url}api/generate`, data);
+            // try {
+            //     const response = await axios.post(`${API_FASTAPI.url}api/generate`, data);
 
-                if (response.data.status === 200) {
-                    dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
-                    const newBotChat: ChatProps = {
-                        user: { id: 0, role: 0, name: "bot" },
-                        text: response.data.data[0].generated_text
-                    }
-                    // Send bot response to WebSocket server
-                    ws.current?.send(JSON.stringify(newBotChat));
-                }
-            } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    console.error('Error with axios request:', error.message);
-                } else {
-                    console.error('Unexpected error:', error);
-                }
-            }
+            //     if (response.data.status === 200) {
+            //         console.log("chats.length: " + chats.length);
+
+            //         chats.length == 0 && FETCH_POST_ROOM("/rooms/", dataRoom, dispatch)
+            //         dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+            //         const newBotChat: ChatProps = {
+            //             user: { id: 0, role: 0, username: "bot" },
+            //             text: response.data.data[0].generated_text
+            //         }
+            //         // Send bot response to WebSocket server
+            //         ws.current?.send(JSON.stringify(newBotChat));
+            //     }
+            // } catch (error) {
+            //     if (axios.isAxiosError(error)) {
+            //         console.error('Error with axios request:', error.message);
+            //     } else {
+            //         console.error('Unexpected error:', error);
+            //     }
+            // }
         }
     }
 
