@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import MainChat from "../../components/main/mainChat";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { FETCH_ROOM, USER_INFO } from "../../mock-data/mockData";
+import { USER_INFO } from "../../mock-data/mockData";
 import { PacmanLoader } from "react-spinners";
 import { CSSProperties } from "styled-components";
+import { FETCH_ROOM } from "../../utils/FetchData";
+import { useDispatch } from "react-redux";
 import { SidebarData } from "../../components/sidebar/SidebarData";
 import CreateDataset from "../../components/createDataset/HomeCreateDataset";
 
@@ -14,14 +16,15 @@ const override: CSSProperties = {
 };
 
 const Home = () => {
+     const dispatch = useDispatch();
      const [showMainChat, setShowMainChat] = useState(true);
 
     const toggleComponent = () => {
         setShowMainChat(!showMainChat);
     };
-    useEffect(()=>{
-        FETCH_ROOM(USER_INFO?.id, SidebarData)
-    },[USER_INFO?.id])
+    useEffect(() => {
+        FETCH_ROOM(USER_INFO.id, dispatch);
+    }, [])
 
     return (
         USER_INFO?.id ?

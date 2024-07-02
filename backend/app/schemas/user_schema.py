@@ -4,14 +4,13 @@ from app.schemas.chat_schema import Chat
 
 class UserBase(BaseModel):
     username: str
-    password: str
     role: int
 
 class UserCreate(UserBase):
-    pass
+    password: str
 
 class UserUpdate(UserBase):
-    pass
+    password: str
 
 class User(UserBase):
     id: int

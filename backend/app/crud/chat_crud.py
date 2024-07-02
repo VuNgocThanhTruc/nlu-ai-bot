@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models import chat_model
 from app.schemas import chat_schema
+from sqlalchemy.orm import joinedload
 
 def create_chat(db: Session, chat: chat_schema.ChatCreate):
     db_chat = chat_model.Chat(message=chat.message, id_room=chat.id_room, id_user=chat.id_user)
@@ -14,6 +15,9 @@ def get_chats(db: Session, skip: int = 0, limit: int = 100):
 
 def get_chat(db: Session, chat_id: int):
     return db.query(chat_model.Chat).filter(chat_model.Chat.id == chat_id).first()
+
+def get_chats_by_room(db: Session, id_room: int):
+    return db.query(chat_model.Chat).options(joinedload(chat_model.Chat.user)).filter(chat_model.Chat.id_room == id_room).all()
 
 def update_chat(db: Session, chat_id: int, chat: chat_schema.ChatUpdate):
     db_chat = db.query(chat_model.Chat).filter(chat_model.Chat.id == chat_id).first()
