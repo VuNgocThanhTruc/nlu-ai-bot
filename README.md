@@ -26,6 +26,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
   Run server:
   ### `uvicorn main:app --reload`
 
+  If run with Windows download & add variable enviroment:
+  1. tessera on windows: https://www.miai.vn/2019/08/22/ocr-nhan-dang-van-ban-tieng-viet-voi-tesseract-ocr/
+  2. popper on windows: https://github.com/oschwartz10612/poppler-windows/releases/Release-24.02.0-0.zip
+
 ## Authors
 Vũ Ngọc Thanh Trúc  
 Nguyễn Đăng Phước 

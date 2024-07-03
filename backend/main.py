@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from app.database.database_connection import create_tables
-from app.routers import users_router, chats_router, rooms_router
+from app.routers import users_router, chats_router, rooms_router, dataset_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.websocket import websocket
 
@@ -8,17 +8,17 @@ app = FastAPI()
 
 # Cấu hình CORS
 origins = [
-    "http://localhost:3000",  
-    "http://example.com",     
-    # "*" 
+    "http://localhost:3000",
+    "http://example.com",
+    # "*"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  
-    allow_headers=["*"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 create_tables()
@@ -42,3 +42,4 @@ async def websocket_endpoints(ws: WebSocket):
 app.include_router(users_router.router, prefix="/users", tags=["users"])
 app.include_router(rooms_router.router, prefix="/rooms", tags=["rooms"])
 app.include_router(chats_router.router, prefix="/chats", tags=["chats"])
+app.include_router(dataset_router.router, prefix="/datasets", tags=["datasets"])

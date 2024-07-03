@@ -11,7 +11,8 @@ export const SidebarLink = styled.div`
     text-decoration: none;
     color: black;
     border-radius: 10px;
-
+    cursor: pointer;
+    
     &.selected {
         background-color: rgba(31, 31, 27, 0.06);
         border-bottom: 4px solid #44903E;

@@ -4,3 +4,6 @@ sqlalchemy
 databases
 psycopg2-binary
 bcrypt
+pytesseract
+tesseract
+pdf2image

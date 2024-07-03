@@ -31,7 +31,9 @@ const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
         <IconContext.Provider value={{ color: '#2d313a' }}> {/* Updated color */}
             <Container>
                 <Nav>
-                    <Logo src={imageChatLogo} alt="Logo" />
+                    <NavIcon to="/">
+                        <Logo src={imageChatLogo} alt="Logo" />
+                    </NavIcon>
                     <NavIcon to="#" onClick={showSidebar}>
                         {sidebar ? <AiOutlineMenuFold /> : <AiOutlineMenu />}
                     </NavIcon>
@@ -39,7 +41,7 @@ const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
                     <NavIcon to="#">
                         <MdOutlineDarkMode />
                     </NavIcon>
-                    <NavIcon to="#" onClick={onToggleComponent}>
+                    <NavIcon to="/dataset" onClick={onToggleComponent}>
                         <MdDataObject />
                     </NavIcon>
                     <NavIcon to="#">
