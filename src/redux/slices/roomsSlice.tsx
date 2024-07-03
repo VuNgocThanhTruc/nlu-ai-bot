@@ -6,19 +6,19 @@ export const roomsSlice = createSlice({
     name: 'rooms', //mapping parent
     initialState: {
         rooms: SidebarData,
-        selectedRoom: null,
+        selectedRoom: 0,
     }, //giá trị khởi tạo ~ state
     reducers: {
         //redux toolkit auto action creater => {type: rooms/addRoom}
         addRoom: (state, action: PayloadAction<SidebarItem>) => {
             // viết giống multation thực tế lại immultation, nhờ toolkit xử lý bên dưới
-            state.rooms.push(action.payload);
+            state.rooms.splice(1, 0, action.payload);
         },
         choosedRoom: (state, action) => {
             state.selectedRoom = action.payload;
         },
         loadRooms: (state, action: PayloadAction<SidebarItem[]>) => {
-            state.rooms.splice(1, state.rooms.length, ...action.payload);
+            state.rooms = [state.rooms[0], ...action.payload]; 
         }
     }
 })

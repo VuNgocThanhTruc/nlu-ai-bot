@@ -9,7 +9,8 @@ import axios from "axios";
 import { chatsSlice } from "../../../redux/slices/chatsSlice";
 import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
 import { USER_INFO } from "../../../mock-data/mockData";
-import { chats, roomsselectedSelector } from "../../../redux/selectors";
+import { chats, roomsSelector, roomsselectedSelector } from "../../../redux/selectors";
+import { roomsSlice } from "../../../redux/slices/roomsSlice";
 
 const ChatFooter = () => {
     const [text, setText] = useState('')
@@ -17,6 +18,7 @@ const ChatFooter = () => {
     const [isTextEmpty, setIsTextEmpty] = useState(true);
     const ws = useRef<WebSocket | null>(null);
     const roomsselected = useSelector(roomsselectedSelector);
+    const roomsFromStore = useSelector(roomsSelector);
     const roomsselectedRef = useRef(roomsselected);
 
     useEffect(() => {
@@ -42,10 +44,9 @@ const ChatFooter = () => {
             }
 
             dispatch(chatsSlice.actions.addChat(newChat));
-            chats.length == 0 && FETCH_POST_ROOM("/rooms/", dataRoom, dispatch)
-            POST_CHAT(newChat, roomsselectedRef.current)
+            roomsselectedRef.current == 0 ? FETCH_POST_ROOM("/rooms/", newChat, dispatch)
+                : POST_CHAT(newChat, roomsselectedRef.current, dispatch)
         };
-
 
         return () => {
             ws.current?.close();
