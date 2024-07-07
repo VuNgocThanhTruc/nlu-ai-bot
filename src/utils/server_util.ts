@@ -1,5 +1,5 @@
 export const API_FASTAPI = {
-   url_deploy: 'https://2a37-34-105-4-177.ngrok-free.app/',
-   url: 'http://localhost:8000',
-   ws_server: 'ws://localhost:8000'
+   url_deploy: 'http://localhost:8000',
+   url: 'https://e3e7-34-81-9-184.ngrok-free.app',
+   ws_server: 'ws://6.tcp.ngrok.io:10648',
 }

@@ -6,9 +6,12 @@ import { chatsSlice } from "../redux/slices/chatsSlice";
 import { ChatProps, UserProps } from "./types";
 
 export const FETCH_ROOM = (user_id: number, dispatch: any) => {
-    axios.get(`${API_FASTAPI.url}/rooms/user/${user_id}`)
+    axios.get(`${API_FASTAPI.url}/rooms/user/${user_id}`, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+    })
         .then(response => {
-
             const rooms: SidebarItem[] = [];
             if (response.status === 200)
                 response.data.forEach((room: any) => {
@@ -33,7 +36,11 @@ export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
         title: data.text
     }
 
-    axios.post(`${API_FASTAPI.url}${path}`, dataRequest)
+    axios.post(`${API_FASTAPI.url}${path}`, dataRequest, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+    })
         .then(response => {
             if (response.status === 200) {
                 let room = response.data
@@ -55,7 +62,11 @@ export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
 }
 // /chats/room/{id_room}
 export const FETCH_CHATS_BY_ROOM = (id_room: number, dispatch: any) => {
-    axios.get(`${API_FASTAPI.url}/chats/room/${id_room}`)
+    axios.get(`${API_FASTAPI.url}/chats/room/${id_room}`, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+    })
         .then(response => {
             const arrChat: ChatProps[] = [];
             if (response.status === 200)
@@ -87,7 +98,11 @@ export const POST_CHAT = (data: ChatProps, roomsSelected: number, dispatch: any)
         id_user: data.user.id
     }
 
-    axios.post(`${API_FASTAPI.url}/chats/`, dataRequest)
+    axios.post(`${API_FASTAPI.url}/chats/`, dataRequest, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+    })
         .then(response => {
             response.status === 200 && data.user.id != 1 &&
                 FETCH_ROOM(data.user.id, dispatch)
