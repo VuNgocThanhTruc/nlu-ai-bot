@@ -4,8 +4,6 @@ import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingResponseChatSlice } from "../../../redux/slices/loadingResponseChatSlice";
 import { ChatProps } from "../../../utils/types";
-import { API_FASTAPI } from '../../../utils/server_util'
-import axios from "axios";
 import { chatsSlice } from "../../../redux/slices/chatsSlice";
 import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
 import { USER_INFO } from "../../../mock-data/mockData";
@@ -26,31 +24,26 @@ const ChatFooter = () => {
     }, [roomsselected]);
 
     useEffect(() => {
-        ws.current = new WebSocket(API_FASTAPI.ws_server);
+        const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
+        if (websocketUrl) {
+            ws.current = new WebSocket(websocketUrl);
+            ws.current.onopen = () => {
+                console.log('WebSocket is open now.');
+            };
 
-        ws.current.onopen = () => {
-            console.log('WebSocket is open now.');
-        };
+            ws.current.onclose = () => {
+                console.log('WebSocket is closed now.');
+            };
 
-        ws.current.onclose = () => {
-            console.log('WebSocket is closed now.');
-        };
+            ws.current.onmessage = (event) => {
+                const newChat = JSON.parse(event.data);
+                dispatch(chatsSlice.actions.addChat(newChat));
+            };
 
-        ws.current.onmessage = (event) => {
-            const newChat = JSON.parse(event.data);
-            let dataRoom = {
-                "id_user": USER_INFO.id,
-                "title": text
-            }
-
-            dispatch(chatsSlice.actions.addChat(newChat));
-            roomsselectedRef.current == 0 ? FETCH_POST_ROOM("/rooms/", newChat, dispatch)
-                : POST_CHAT(newChat, roomsselectedRef.current, dispatch)
-        };
-
-        return () => {
-            ws.current?.close();
-        };
+            return () => {
+                ws.current?.close();
+            };
+        }
     }, [dispatch]);
 
     const handleButonSend = async () => {
@@ -79,7 +72,7 @@ const ChatFooter = () => {
                 dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
             }, 3000);
             // try {
-            //     const response = await axios.post(`${API_FASTAPI.url}api/generate`, data);
+            //     const response = await axios.post(`${process.env.URL_SERVER}api/generate`, data);
 
             //     if (response.data.status === 200) {
             //         console.log("chats.length: " + chats.length);

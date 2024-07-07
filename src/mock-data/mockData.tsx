@@ -1,11 +1,4 @@
-import axios from "axios";
 import { ChatProps, RoomProps } from "../utils/types";
-import { API_FASTAPI } from "../utils/server_util";
-import { SidebarItem } from "../model/SidebarItem";
-import { SidebarData } from "./SidebarData";
-import { useDispatch } from "react-redux";
-import { roomsSlice } from "../redux/slices/roomsSlice";
-
 
 export const chats: ChatProps[] = [
     // {

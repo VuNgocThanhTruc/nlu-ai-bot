@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Screen1 from './step1/HomeStep1';
 import Screen2 from './step2/HomeStep2';
 import axios from "axios";
-import { API_FASTAPI } from "../../utils/server_util";
 import HomeStep1 from "./step1/HomeStep1";
 // import Screen3 from './Screen3';
 // import Screen4 from './Screen4';
@@ -35,7 +34,7 @@ const HomeCreateDataset: React.FC = () => {
             const formData = new FormData();
             formData.append('file', file);
 
-            axios.post(`${API_FASTAPI.url}/datasets/upload`, formData)
+            axios.post(`${process.env.URL_SERVER}/datasets/upload`, formData)
                 .then(response => {
                     if (response.status === 200) {
                         setModalText(response.data.text); 
