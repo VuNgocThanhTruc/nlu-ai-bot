@@ -2,7 +2,7 @@ import { ChatProps, RoomProps } from "../utils/types";
 
 export const chats: ChatProps[] = [
     // {
-    //     user: { id: 1, role: 1, name: "user" },
+    //     user: { id: 1, role: 1, user: user },
     //     text: 'Hello, how are you?'
     // },
 ]

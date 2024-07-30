@@ -7,3 +7,4 @@ bcrypt
 pytesseract
 tesseract
 pdf2image
+transformers

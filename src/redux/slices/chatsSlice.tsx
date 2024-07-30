@@ -11,6 +11,13 @@ export const chatsSlice = createSlice({
             // viết giống multation thực tế lại immultation, nhờ toolkit xử lý bên dưới
             state.push(action.payload);
         },
+        updateLastChat: (state, action: PayloadAction<string>) => {
+            if (state.length > 0) {
+                state[state.length - 1].text += action.payload;
+            } else {
+                state[0].text += action.payload;
+            }
+        },
         loadChats: (state, action: PayloadAction<ChatProps[]>) => {
             state.splice(0, state.length, ...action.payload);
         }

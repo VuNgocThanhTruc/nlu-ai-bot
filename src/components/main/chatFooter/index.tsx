@@ -9,6 +9,7 @@ import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
 import { USER_INFO } from "../../../mock-data/mockData";
 import { chats, roomsSelector, roomsselectedSelector } from "../../../redux/selectors";
 import { roomsSlice } from "../../../redux/slices/roomsSlice";
+import axios from "axios";
 
 const ChatFooter = () => {
     const [text, setText] = useState('')
@@ -18,6 +19,11 @@ const ChatFooter = () => {
     const roomsselected = useSelector(roomsselectedSelector);
     const roomsFromStore = useSelector(roomsSelector);
     const roomsselectedRef = useRef(roomsselected);
+    const textRef = useRef(text); 
+
+    useEffect(() => {
+        textRef.current = text; 
+    }, [text]);
 
     useEffect(() => {
         roomsselectedRef.current = roomsselected;
@@ -36,8 +42,25 @@ const ChatFooter = () => {
             };
 
             ws.current.onmessage = (event) => {
-                const newChat = JSON.parse(event.data);
-                dispatch(chatsSlice.actions.addChat(newChat));
+                const response = JSON.parse(event.data);
+                // console.log(response);
+                
+                if (response.user.role != 0)
+                    dispatch(chatsSlice.actions.addChat(response));
+                else {
+                    dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+                    const { user, generate_text, prev_text, stop } = response;
+                    const newChat: ChatProps = {
+                        user: user,
+                        text: ""
+                    };
+                    prev_text == textRef.current && dispatch(chatsSlice.actions.addChat(newChat));
+                    dispatch(chatsSlice.actions.updateLastChat(generate_text));
+                    if (stop) {
+                        setText('')
+                        setIsTextEmpty(true)
+                    }
+                }
             };
 
             return () => {
@@ -59,20 +82,19 @@ const ChatFooter = () => {
                 "id_user": USER_INFO.id,
                 "title": text
             }
-            setText('')
-            setIsTextEmpty(true);
+            
             const data = { "input": newChat.text }
             dispatch(loadingResponseChatSlice.actions.setLoadingResponse(true))
-            setTimeout(() => {
-                const newBotChat: ChatProps = {
-                    user: { id: 1, role: 0, username: "bot" },
-                    text: "Đã tạo sinh văn bản thành công!"
-                }
-                ws.current?.send(JSON.stringify(newBotChat));
-                dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
-            }, 3000);
+            // setTimeout(() => {
+            //     const newBotChat: ChatProps = {
+            //         user: { id: 1, role: 0, username: "bot" },
+            //         text: "Đã tạo sinh văn bản thành công!"
+            //     }
+            //     ws.current?.send(JSON.stringify(newBotChat));
+            //     dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+            // }, 3000);
             // try {
-            //     const response = await axios.post(`${process.env.URL_SERVER}api/generate`, data);
+            //     const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}api/generate`, data);
 
             //     if (response.data.status === 200) {
             //         console.log("chats.length: " + chats.length);

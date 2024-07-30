@@ -34,7 +34,7 @@ const HomeCreateDataset: React.FC = () => {
             const formData = new FormData();
             formData.append('file', file);
 
-            axios.post(`${process.env.URL_SERVER}/datasets/upload`, formData)
+            axios.post(`${process.env.REACT_APP_URL_SERVER}/datasets/upload`, formData)
                 .then(response => {
                     if (response.status === 200) {
                         setModalText(response.data.text); 
