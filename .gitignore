@@ -24,3 +24,7 @@ yarn-error.log*
 
 .idea
 __pycache__
+.venv
+# Release-24.02.0-0
+# Tesseract-OCR
+storage

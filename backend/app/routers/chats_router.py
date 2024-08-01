@@ -23,6 +23,10 @@ def read_chat(chat_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Chat not found")
     return db_chat
 
+@router.get("/room/{id_room}", response_model=List[chat_schema.Chat])
+def read_chats_by_room(id_room: int, db: Session = Depends(get_db)):
+    return chat_crud.get_chats_by_room(db=db, id_room=id_room)
+
 @router.put("/{chat_id}", response_model=chat_schema.Chat)
 def update_chat(chat_id: int, chat: chat_schema.ChatUpdate, db: Session = Depends(get_db)):
     db_chat = chat_crud.update_chat(db=db, chat_id=chat_id, chat=chat)

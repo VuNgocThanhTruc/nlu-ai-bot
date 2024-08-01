@@ -8,6 +8,7 @@ class Room(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     id_user = Column(Integer, ForeignKey('users.id'))
+    title = Column(String, nullable=False)
     create_at = Column(DateTime, default=func.now())
     update_at = Column(DateTime, default=func.now())
 

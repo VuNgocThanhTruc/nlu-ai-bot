@@ -3,7 +3,7 @@ import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineMenuFold } from 'react-icons/ai';
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineDarkMode, MdDataObject } from "react-icons/md";
-import { SidebarData } from './SidebarData';
+import { SidebarData } from '../../mock-data/SidebarData';
 import Submenu from './Submenu';
 import imageChatLogo from "../../images/logo.png";
 import {
@@ -14,6 +14,9 @@ import {
     Logo,
     SidebarWrap
 } from './SidebarStyles'; // Importing the styled-components
+import { roomsSelector } from '../../redux/selectors';
+import { useSelector } from 'react-redux';
+import { SidebarItem } from '../../model/SidebarItem';
 
 interface SidebarProps {
     onToggleComponent: () => void;
@@ -22,12 +25,15 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
     const [sidebar, setSidebar] = useState(true);
     const showSidebar = () => setSidebar(!sidebar);
+    const RoomDataFromStore: SidebarItem[] = useSelector(roomsSelector);
 
     return (
         <IconContext.Provider value={{ color: '#2d313a' }}> {/* Updated color */}
             <Container>
                 <Nav>
-                    <Logo src={imageChatLogo} alt="Logo" />
+                    <NavIcon to="/">
+                        <Logo src={imageChatLogo} alt="Logo" />
+                    </NavIcon>
                     <NavIcon to="#" onClick={showSidebar}>
                         {sidebar ? <AiOutlineMenuFold /> : <AiOutlineMenu />}
                     </NavIcon>
@@ -35,7 +41,7 @@ const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
                     <NavIcon to="#">
                         <MdOutlineDarkMode />
                     </NavIcon>
-                    <NavIcon to="#" onClick={onToggleComponent}>
+                    <NavIcon to="/dataset" onClick={onToggleComponent}>
                         <MdDataObject />
                     </NavIcon>
                     <NavIcon to="#">
@@ -44,7 +50,7 @@ const Sidebar: FC<SidebarProps> = ({ onToggleComponent }) => {
                 </Nav>
                 <SidebarNav sidebar={sidebar}>
                     <SidebarWrap>
-                        {SidebarData.map((item, index) => {
+                        {RoomDataFromStore.map((item: SidebarItem, index: number) => {
                             return <Submenu item={item} key={index} />;
                         })}
                     </SidebarWrap>

@@ -1,79 +1,120 @@
 import React, { useEffect, useRef, useState } from "react";
 import sendBtn from '../../../assests/send-icon.svg'
 import "./style.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingResponseChatSlice } from "../../../redux/slices/loadingResponseChatSlice";
 import { ChatProps } from "../../../utils/types";
-import { API_FASTAPI } from '../../../utils/server_util'
-import axios from "axios";
 import { chatsSlice } from "../../../redux/slices/chatsSlice";
+import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
+import { USER_INFO } from "../../../mock-data/mockData";
+import { chats, roomsSelector, roomsselectedSelector } from "../../../redux/selectors";
+import { roomsSlice } from "../../../redux/slices/roomsSlice";
+import axios from "axios";
 
 const ChatFooter = () => {
     const [text, setText] = useState('')
     const dispatch = useDispatch()
     const [isTextEmpty, setIsTextEmpty] = useState(true);
     const ws = useRef<WebSocket | null>(null);
+    const roomsselected = useSelector(roomsselectedSelector);
+    const roomsFromStore = useSelector(roomsSelector);
+    const roomsselectedRef = useRef(roomsselected);
+    const textRef = useRef(text); 
 
     useEffect(() => {
-        ws.current = new WebSocket(API_FASTAPI.ws_server);
+        textRef.current = text; 
+    }, [text]);
 
-        ws.current.onopen = () => {
-            console.log('WebSocket is open now.');
-        };
+    useEffect(() => {
+        roomsselectedRef.current = roomsselected;
+    }, [roomsselected]);
 
-        ws.current.onclose = () => {
-            console.log('WebSocket is closed now.');
-        };
+    useEffect(() => {
+        const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
+        if (websocketUrl) {
+            ws.current = new WebSocket(websocketUrl);
+            ws.current.onopen = () => {
+                console.log('WebSocket is open now.');
+            };
 
-        ws.current.onmessage = (event) => {
-            const newChat = JSON.parse(event.data);
-            dispatch(chatsSlice.actions.addChat(newChat));
-        };
+            ws.current.onclose = () => {
+                console.log('WebSocket is closed now.');
+            };
 
-        return () => {
-            ws.current?.close();
-        };
+            ws.current.onmessage = (event) => {
+                const response = JSON.parse(event.data);
+                // console.log(response);
+                
+                if (response.user.role != 0)
+                    dispatch(chatsSlice.actions.addChat(response));
+                else {
+                    dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+                    const { user, generate_text, prev_text, stop } = response;
+                    const newChat: ChatProps = {
+                        user: user,
+                        text: ""
+                    };
+                    prev_text == textRef.current && dispatch(chatsSlice.actions.addChat(newChat));
+                    dispatch(chatsSlice.actions.updateLastChat(generate_text));
+                    if (stop) {
+                        setText('')
+                        setIsTextEmpty(true)
+                    }
+                }
+            };
+
+            return () => {
+                ws.current?.close();
+            };
+        }
     }, [dispatch]);
 
     const handleButonSend = async () => {
         const newChat: ChatProps = {
-            user: { id: 1, role: 1, name: "user" },
+            user: { id: USER_INFO.id, role: USER_INFO.role, username: USER_INFO.username },
             text: text
         }
 
         if (text.trim() !== '' && ws.current && ws.current.readyState === WebSocket.OPEN) {
             // Send chat to WebSocket server
             ws.current?.send(JSON.stringify(newChat));
-            setText('')
-            setIsTextEmpty(true);
+            let dataRoom = {
+                "id_user": USER_INFO.id,
+                "title": text
+            }
+            
             const data = { "input": newChat.text }
             dispatch(loadingResponseChatSlice.actions.setLoadingResponse(true))
-            setTimeout(() => {
-                ws.current?.send(JSON.stringify({
-                    user: { id: 1, role: 1, name: "bot" },
-                    text: "Đã tạo sinh văn bản thành công!"
-                }));
-                dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
-            }, 3000);
-            try {
-                const response = await axios.post(`${API_FASTAPI.url}api/generate`, data);
+            // setTimeout(() => {
+            //     const newBotChat: ChatProps = {
+            //         user: { id: 1, role: 0, username: "bot" },
+            //         text: "Đã tạo sinh văn bản thành công!"
+            //     }
+            //     ws.current?.send(JSON.stringify(newBotChat));
+            //     dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+            // }, 3000);
+            // try {
+            //     const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}api/generate`, data);
 
-                if (response.data.status === 200) {
-                    dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
-                    const newBotChat: ChatProps = {
-                        user: { id: 0, role: 0, name: "bot" },
-                        text: response.data.data[0].generated_text
-                    }
-                    // Send bot response to WebSocket server
-                    ws.current?.send(JSON.stringify(newBotChat));
-                }
-            } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    console.error('Error with axios request:', error.message);
-                } else {
-                    console.error('Unexpected error:', error);
-                }
-            }
+            //     if (response.data.status === 200) {
+            //         console.log("chats.length: " + chats.length);
+
+            //         chats.length == 0 && FETCH_POST_ROOM("/rooms/", dataRoom, dispatch)
+            //         dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
+            //         const newBotChat: ChatProps = {
+            //             user: { id: 0, role: 0, username: "bot" },
+            //             text: response.data.data[0].generated_text
+            //         }
+            //         // Send bot response to WebSocket server
+            //         ws.current?.send(JSON.stringify(newBotChat));
+            //     }
+            // } catch (error) {
+            //     if (axios.isAxiosError(error)) {
+            //         console.error('Error with axios request:', error.message);
+            //     } else {
+            //         console.error('Unexpected error:', error);
+            //     }
+            // }
         }
     }
 
