@@ -52,7 +52,6 @@ export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
                 }
                 dispatch(roomsSlice.actions.choosedRoom(room.id));
                 dispatch(roomsSlice.actions.addRoom(newRoom));
-                POST_CHAT(data, room.id, dispatch)
             }
         })
         .catch(error => {
@@ -90,19 +89,23 @@ export const FETCH_CHATS_BY_ROOM = (id_room: number, dispatch: any) => {
 }
 
 // /chats/
-export const POST_CHAT = (data: ChatProps, roomsSelected: number, dispatch: any) => {
+export const POST_CHAT = async (data: ChatProps, roomsSelected: number, dispatch: any) => {
     const dataRequest = {
         message: data.text,
         id_room: roomsSelected,
         id_user: data.user.id
     }
 
-    axios.post(`${process.env.REACT_APP_URL_SERVER}/chats/`, dataRequest, {
+    console.log(dataRequest);
+
+    await axios.post(`${process.env.REACT_APP_URL_SERVER}/chats/`, dataRequest, {
         headers: {
             'ngrok-skip-browser-warning': 'true'
         }
     })
         .then(response => {
+            console.log(response);
+
             response.status === 200 && data.user.id !== 1 &&
                 FETCH_ROOM(data.user.id, dispatch)
         })
