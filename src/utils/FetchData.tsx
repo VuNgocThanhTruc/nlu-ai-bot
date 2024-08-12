@@ -35,6 +35,8 @@ export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
         title: data.text
     }
 
+    console.log(dataRequest);
+
     axios.post(`${process.env.REACT_APP_URL_SERVER}${path}`, dataRequest, {
         headers: {
             'ngrok-skip-browser-warning': 'true'
@@ -96,16 +98,12 @@ export const POST_CHAT = async (data: ChatProps, roomsSelected: number, dispatch
         id_user: data.user.id
     }
 
-    console.log(dataRequest);
-
     await axios.post(`${process.env.REACT_APP_URL_SERVER}/chats/`, dataRequest, {
         headers: {
             'ngrok-skip-browser-warning': 'true'
         }
     })
         .then(response => {
-            console.log(response);
-
             response.status === 200 && data.user.id !== 1 &&
                 FETCH_ROOM(data.user.id, dispatch)
         })

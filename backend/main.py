@@ -72,10 +72,6 @@ async def websocket_endpoints(ws: WebSocket):
     try:
         while True:
             data = await ws.receive_json()
-            if(data['user']['role']!=0):
-                await wsConnection.broadcast(data)
-            model.to("cpu")
-    
             await wsConnection.generate_and_broadcast(model, tokenizer, data)
     except WebSocketDisconnect:
         wsConnection.disconnect(ws)

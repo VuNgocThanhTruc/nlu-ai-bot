@@ -1,9 +1,5 @@
-import { USER_INFO } from "../../mock-data/mockData";
-import { PacmanLoader } from "react-spinners";
-import styled, { CSSProperties } from "styled-components";
-import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import CreateDataset from "../../components/createDataset/HomeCreateDataset";
-import { Logo, NavIcon } from "../../components/sidebar/SidebarStyles";
 import imageChatLogo from "../../images/logo.png";
 import { useNavigate } from 'react-router-dom';
 const LogoContainer = styled.div`

@@ -24,10 +24,10 @@ const Submenu: FC<SidebarLinkProps> = ({ item }) => {
 
     const handleOnClick = () => {
         setSubnav(!subnav);
-        if(item.idRoom !== undefined){
+        if (item.idRoom !== undefined) {
             dispatch(roomsSlice.actions.choosedRoom(item.idRoom))
             FETCH_CHATS_BY_ROOM(item.idRoom, dispatch)
-        }else{
+        } else {
             dispatch(roomsSlice.actions.choosedRoom(0))
             dispatch(chatsSlice.actions.loadChats(chats))
         }

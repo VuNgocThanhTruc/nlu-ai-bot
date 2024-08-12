@@ -24,7 +24,10 @@ class WebsocketConnection:
         for connection in self.active_connections:
             await connection.send_json(data)
             
-    async def generate_and_broadcast(self, model, tokenizer, message):
+    async def generate_and_broadcast(self, model, tokenizer, data):
+
+        await self.broadcast(data)
+        message = data['text']
         stop = StopOnTokens()
         # history_transformer_format = history + [[message, ""]]
         messages = (f"""
@@ -36,9 +39,9 @@ class WebsocketConnection:
                     <|im_end|>
                     <|im_start|> assistant
                     """)
-                    
+
         model_inputs = tokenizer([messages], return_tensors="pt").to("cpu")
-        streamer = TextIteratorStreamer(tokenizer, timeout=30., skip_prompt=True, skip_special_tokens=False)
+        streamer = TextIteratorStreamer(tokenizer, timeout=120., skip_prompt=True, skip_special_tokens=False)
 
         generate_kwargs = dict(
             model_inputs,
@@ -57,34 +60,28 @@ class WebsocketConnection:
         t = Thread(target=model.generate, kwargs=generate_kwargs)
         t.start()
 
-        partial_message  = ""
+        flag = False
+        index = 0
         for new_token in streamer:
-            print(new_token)
+            # print(new_token)
+            # response client json
             response = {
-                    'user': { 'id': 1, 'role': 0, 'username': "bot" },
-                    'generate_text': new_token,
-                    'prev_text': input,
-                    'stop': False
-                }
-
-                # Gửi response dưới dạng JSON
+                        'user': { 'id': 1, 'role': 0, 'username': "bot" },
+                        'generate_text': new_token,
+                        'index': index,
+                        'stop': flag
+                    }
+            index = 1
             await self.broadcast(response)
-                
-            if new_token != '<':
-                partial_message += new_token
-                # yield partial_message
-                
+        flag = True
         response = {
-                    'user': { 'id': 1, 'role': 0, 'username': "bot" },
-                    'generate_text': new_token,
-                    'prev_text': input,
-                    'stop': True
-                }
-
-                # Gửi response dưới dạng JSON
+            'user': {'id': 1, 'role': 0, 'username': "bot"},
+            'generate_text': '',
+            'index': index,
+            'stop': flag
+        }
         await self.broadcast(response)
         t.join()
-        return partial_message
 
 class StopOnTokens(StoppingCriteria):
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:

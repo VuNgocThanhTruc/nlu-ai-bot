@@ -16,14 +16,14 @@ def create_chat(db: Session, chat: chat_schema.ChatCreate):
     db.refresh(db_chat)
     return db_chat
 
-def get_chats(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(chat_model.Chat).offset(skip).limit(limit).all()
+def get_chats(db: Session):
+    return db.query(chat_model.Chat).order_by(chat_model.Chat.id).all()
 
 def get_chat(db: Session, chat_id: int):
     return db.query(chat_model.Chat).filter(chat_model.Chat.id == chat_id).first()
 
 def get_chats_by_room(db: Session, id_room: int):
-    return db.query(chat_model.Chat).options(joinedload(chat_model.Chat.user)).filter(chat_model.Chat.id_room == id_room).all()
+    return db.query(chat_model.Chat).options(joinedload(chat_model.Chat.user)).filter(chat_model.Chat.id_room == id_room).order_by(chat_model.Chat.id).all()
 
 def update_chat(db: Session, chat_id: int, chat: chat_schema.ChatUpdate):
     db_chat = db.query(chat_model.Chat).filter(chat_model.Chat.id == chat_id).first()

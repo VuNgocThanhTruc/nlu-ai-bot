@@ -13,8 +13,8 @@ def create_room(room: room_schema.RoomCreate, db: Session = Depends(get_db)):
     return room_crud.create_room(db=db, room=room)
 
 @router.get("/", response_model=list[room_schema.Room])
-def read_rooms(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return room_crud.get_rooms(db=db, skip=skip, limit=limit)
+def read_rooms(db: Session = Depends(get_db)):
+    return room_crud.get_rooms(db=db)
 
 @router.get("/{room_id}", response_model=room_schema.Room)
 def read_room(room_id: int, db: Session = Depends(get_db)):

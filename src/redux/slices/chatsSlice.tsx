@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { chats } from "../../mock-data/mockData";
-import { ChatProps, ListChatProps } from "../../utils/types";
+import { ChatProps } from "../../utils/types";
 
 export const chatsSlice = createSlice({
     name: 'chats', //mapping parent

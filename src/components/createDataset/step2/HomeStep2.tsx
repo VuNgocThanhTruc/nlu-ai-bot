@@ -1,4 +1,4 @@
-import styled, { CSSProperties } from "styled-components";
+import styled from "styled-components";
 import imageChatLogo from "../../../images/logo.png";
 import { useNavigate } from 'react-router-dom';
 const LogoContainer = styled.div`
