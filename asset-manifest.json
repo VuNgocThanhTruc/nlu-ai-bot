@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/nlu-ai-bot/static/css/main.9f0397a8.css",
+    "main.js": "/nlu-ai-bot/static/js/main.c8b2e220.js",
+    "static/js/453.1965bdfb.chunk.js": "/nlu-ai-bot/static/js/453.1965bdfb.chunk.js",
+    "static/media/logo.png": "/nlu-ai-bot/static/media/logo.a8575cfd45762b602c98.png",
+    "static/media/logo-nlu-ai.png": "/nlu-ai-bot/static/media/logo-nlu-ai.d2f9e211d80d1da4ad93.png",
+    "static/media/user.svg": "/nlu-ai-bot/static/media/user.414418c676756e631d05fddc96f6186f.svg",
+    "index.html": "/nlu-ai-bot/index.html",
+    "static/media/send-icon.svg": "/nlu-ai-bot/static/media/send-icon.4e6d6b41b91b81a93fde715d2a555704.svg",
+    "main.9f0397a8.css.map": "/nlu-ai-bot/static/css/main.9f0397a8.css.map",
+    "main.c8b2e220.js.map": "/nlu-ai-bot/static/js/main.c8b2e220.js.map",
+    "453.1965bdfb.chunk.js.map": "/nlu-ai-bot/static/js/453.1965bdfb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9f0397a8.css",
+    "static/js/main.c8b2e220.js"
+  ]
+}
