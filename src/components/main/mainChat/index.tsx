@@ -15,7 +15,7 @@ const MainChat = () => {
 
     return (
         <div className="main d-flex flex-column">
-            <Header />
+            {/* <Header /> */}
             <ListChat
                 roomId={listChat.roomId}
                 loading={listChat.loading}

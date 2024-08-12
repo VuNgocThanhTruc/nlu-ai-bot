@@ -30,6 +30,7 @@ const ChatFooter = () => {
     useEffect(() => {
         const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
         if (websocketUrl) {
+            let sentense_generate = ''
 
             ws.current = new WebSocket(websocketUrl);
             ws.current.onopen = () => {
@@ -40,7 +41,7 @@ const ChatFooter = () => {
                 console.log('WebSocket is closed now.');
             };
 
-            ws.current.onmessage = (event) => {
+            ws.current.onmessage = async (event) => {
                 setText('')
                 setIsTextEmpty(true)
                 const response = JSON.parse(event.data);
@@ -57,16 +58,18 @@ const ChatFooter = () => {
                     }
                     dispatch(chatsSlice.actions.addChat(response));
 
-                    console.log("Room selected: "+ roomsselectedRef.current);
-                    
+                    console.log("Room selected: " + roomsselectedRef.current);
+
                     if (roomsselectedRef.current === 0) {
-                        dataRoom.text = textRef.current;
-                        FETCH_POST_ROOM("/rooms/", dataRoom, dispatch);
-                    }
-                    POST_CHAT(dataRoom, roomsselectedRef.current, dispatch)
+                        const lastestRoom = await FETCH_POST_ROOM("/rooms/", dataRoom, dispatch);
+                        if (lastestRoom) {
+                            console.log("lastestRoom: " + lastestRoom);
+                            POST_CHAT(dataRoom, lastestRoom, dispatch);
+                        }
+                    } else
+                        POST_CHAT(dataRoom, roomsselectedRef.current, dispatch)
                 }
                 else {
-                    let sentense_generate = ''
                     dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
                     const { user, generate_text, index, stop } = response;
                     const newChat: ChatProps = {
@@ -76,6 +79,7 @@ const ChatFooter = () => {
                     index === 0 && dispatch(chatsSlice.actions.addChat(newChat));
                     dispatch(chatsSlice.actions.updateLastChat(generate_text));
                     sentense_generate += generate_text
+
                     if (stop) {
                         dataRoom = {
                             "user": user,
@@ -91,10 +95,6 @@ const ChatFooter = () => {
             };
         }
     }, [dispatch]);
-
-    console.log("List room");
-    console.log(listRoomSelector.length);
-    
 
     const handleButonSend = async () => {
         const newChat: ChatProps = {

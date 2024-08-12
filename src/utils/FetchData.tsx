@@ -29,36 +29,36 @@ export const FETCH_ROOM = (user_id: number, dispatch: any) => {
 }
 
 // /rooms/
-export const FETCH_POST_ROOM = (path: string, data: any, dispatch: any) => {
+export const FETCH_POST_ROOM = async (path: string, data: any, dispatch: any) => {
     const dataRequest = {
         id_user: data.user.id,
         title: data.text
     }
 
-    console.log(dataRequest);
-
-    axios.post(`${process.env.REACT_APP_URL_SERVER}${path}`, dataRequest, {
-        headers: {
-            'ngrok-skip-browser-warning': 'true'
-        }
-    })
-        .then(response => {
-            if (response.status === 200) {
-                let room = response.data
-                const newRoom: SidebarItem = {
-                    title: room.title,
-                    path: `/rooms/${room.id}`,
-                    idRoom: room.id
-                    // createAt: new Date(),
-                    // updateAt: new Date(),
-                }
-                dispatch(roomsSlice.actions.choosedRoom(room.id));
-                dispatch(roomsSlice.actions.addRoom(newRoom));
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_URL_SERVER}${path}`, dataRequest, {
+            headers: {
+                'ngrok-skip-browser-warning': 'true'
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
         });
+
+        if (response.status === 200) {
+            const room = response.data;
+            const newRoom: SidebarItem = {
+                title: room.title,
+                path: `/rooms/${room.id}`,
+                idRoom: room.id
+            };
+
+            dispatch(roomsSlice.actions.choosedRoom(room.id));
+            dispatch(roomsSlice.actions.addRoom(newRoom));
+
+            return room.id;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
 }
 // /chats/room/{id_room}
 export const FETCH_CHATS_BY_ROOM = (id_room: number, dispatch: any) => {
@@ -67,7 +67,7 @@ export const FETCH_CHATS_BY_ROOM = (id_room: number, dispatch: any) => {
             'ngrok-skip-browser-warning': 'true'
         }
     })
-        .then(response => {
+        .then(response => {            
             const arrChat: ChatProps[] = [];
             if (response.status === 200)
                 response.data.forEach((chat: any) => {
