@@ -1,6 +1,10 @@
 from fastapi import WebSocket
 from typing import List
 import torch
+from transformers import (
+    StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
+)
+from threading import Thread
 
 class WebsocketConnection:
     def __init__(self):
@@ -20,62 +24,71 @@ class WebsocketConnection:
         for connection in self.active_connections:
             await connection.send_json(data)
             
-    async def generate_and_broadcast(self, model, tokenizer, data, max_new_tokens=8, context_size=20, temperature=0.1, top_k=50, top_p=0.95, eos_token_id=2):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        input = data['text']
-        idx = tokenizer.encode(input, return_tensors="pt").to(device)
-        stop = False
-        idx = idx.to(device)
-        for _ in range(max_new_tokens):
-            idx_cond = idx[:, -context_size:]
+    async def generate_and_broadcast(self, model, tokenizer, data):
 
-            with torch.no_grad():
-                outputs = model(input_ids=idx_cond)
-                logits = outputs.logits
+        await self.broadcast(data)
+        message = data['text']
+        stop = StopOnTokens()
+        # history_transformer_format = history + [[message, ""]]
+        messages = (f"""
+                    <|im_start|> system
+                    Bạn là một trợ lý AI chuyên về quy chế học vụ. Hãy trả lời các câu hỏi của người dùng một cách chính xác và chi tiết, dựa trên các quy định và chính sách của trường.
+                    <|im_end|>
+                    <|im_start|> user
+                    {message}
+                    <|im_end|>
+                    <|im_start|> assistant
+                    """)
 
-            logits = logits[:, -1, :]
+        model_inputs = tokenizer([messages], return_tensors="pt").to("cpu")
+        streamer = TextIteratorStreamer(tokenizer, timeout=120., skip_prompt=True, skip_special_tokens=False)
 
-            if top_k is not None:
-                top_logits, _ = torch.topk(logits, top_k)
-                min_val = top_logits[:, -1]
-                logits = torch.where(logits < min_val, torch.tensor(float('-inf')).to(logits.device), logits)
+        generate_kwargs = dict(
+            model_inputs,
+            streamer=streamer,
+            max_new_tokens=512,
+            do_sample=True,
+            top_p=0.9,
+            top_k=50,
+            temperature=0.7,
+            num_return_sequences = 1,
+            # num_beams=1,
+            stopping_criteria=StoppingCriteriaList([stop]),
+            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.eos_token_id,
+            )
+        t = Thread(target=model.generate, kwargs=generate_kwargs)
+        t.start()
 
-            if top_p is not None and top_p < 1.0:
-                sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-                cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
-
-                sorted_indices_to_remove = cumulative_probs > top_p
-                sorted_indices_to_remove[:, 1:] = sorted_indices_to_remove[:, :-1].clone()
-                sorted_indices_to_remove[:, 0] = 0
-
-                indices_to_remove = sorted_indices_to_remove.scatter(1, sorted_indices, sorted_indices_to_remove)
-                logits[indices_to_remove] = float('-inf')
-
-            if temperature > 0.0:
-                logits = logits / temperature
-                probs = torch.softmax(logits, dim=-1)
-                idx_next = torch.multinomial(probs, num_samples=1)
-            else:
-                idx_next = torch.argmax(logits, dim=-1, keepdim=True)
-
-            if eos_token_id is not None and (idx_next == eos_token_id).any():
-                stop = True
-
-            if idx.shape[1] >= (max_new_tokens):
-                stop = True
-
+        flag = False
+        index = 0
+        for new_token in streamer:
+            # print(new_token)
+            # response client json
             response = {
-                'user': { 'id': 1, 'role': 0, 'username': "bot" },
-                'generate_text': tokenizer.decode(idx_next[0], skip_special_tokens=True),
-                'prev_text': input,
-                'stop': stop
-            }
-
-            # Gửi response dưới dạng JSON
+                        'user': { 'id': 1, 'role': 0, 'username': "bot" },
+                        'generate_text': new_token,
+                        'index': index,
+                        'stop': flag
+                    }
+            index = 1
             await self.broadcast(response)
+        flag = True
+        response = {
+            'user': {'id': 1, 'role': 0, 'username': "bot"},
+            'generate_text': '',
+            'index': index,
+            'stop': flag
+        }
+        await self.broadcast(response)
+        t.join()
 
-            if stop:
-                break
-
-            idx = torch.cat((idx, idx_next), dim=1)
-            input = tokenizer.decode(idx[0], skip_special_tokens=True)
+class StopOnTokens(StoppingCriteria):
+    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
+        # stop_ids = [29901, 0, 1, 2, 46303, 46304, 40305,30375,30383,1115,16201620, 29242]
+        stop_ids = [0, 1, 2, 46303, 46304, 40305,29889]
+        # stop_ids = [0, 1, 2, 46303, 46304, 40305]
+        for stop_id in stop_ids:
+            if input_ids[0][-1] == stop_id:
+                return True
+        return False

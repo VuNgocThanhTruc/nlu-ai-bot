@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Screen2 from '../step2/HomeStep2';
 import { CloseButton, DownloadButton, EditableTextArea, ModalContent, ModalWrapper, NextButton } from './HomeStep1Style';
 import { useNavigate } from 'react-router-dom';
 

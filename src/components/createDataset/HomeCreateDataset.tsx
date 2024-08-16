@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Screen1 from './step1/HomeStep1';
 import Screen2 from './step2/HomeStep2';
 import axios from "axios";
 import HomeStep1 from "./step1/HomeStep1";

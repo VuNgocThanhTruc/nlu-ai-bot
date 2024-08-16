@@ -3,11 +3,11 @@ import sendBtn from '../../../assests/send-icon.svg'
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingResponseChatSlice } from "../../../redux/slices/loadingResponseChatSlice";
-import { ChatProps, ListChatProps } from "../../../utils/types";
+import { ChatProps } from "../../../utils/types";
 import { chatsSlice } from "../../../redux/slices/chatsSlice";
 import { FETCH_POST_ROOM, POST_CHAT } from "../../../utils/FetchData";
 import { USER_INFO } from "../../../mock-data/mockData";
-import { chats, roomsselectedSelector } from "../../../redux/selectors";
+import { roomsselectedSelector, roomsSelector } from "../../../redux/selectors";
 
 const ChatFooter = () => {
     const [text, setText] = useState('')
@@ -15,10 +15,9 @@ const ChatFooter = () => {
     const [isTextEmpty, setIsTextEmpty] = useState(true);
     const ws = useRef<WebSocket | null>(null);
     const roomsselected = useSelector(roomsselectedSelector);
+    const listRoomSelector = useSelector(roomsSelector);
     const roomsselectedRef = useRef(roomsselected);
     const textRef = useRef(text);
-    const chatsFromStore = useSelector(chats);
-    let sentense_generate = ''
 
     useEffect(() => {
         textRef.current = text;
@@ -31,6 +30,7 @@ const ChatFooter = () => {
     useEffect(() => {
         const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
         if (websocketUrl) {
+            let sentense_generate = ''
 
             ws.current = new WebSocket(websocketUrl);
             ws.current.onopen = () => {
@@ -41,45 +41,51 @@ const ChatFooter = () => {
                 console.log('WebSocket is closed now.');
             };
 
-            ws.current.onmessage = (event) => {
+            ws.current.onmessage = async (event) => {
+                setText('')
                 setIsTextEmpty(true)
                 const response = JSON.parse(event.data);
+
                 let dataRoom: ChatProps = {
                     "user": USER_INFO,
                     "text": ''
                 }
 
-                if (response.user.role != 0) {
-                    sentense_generate = ''
+                if (response.user.role !== 0) {
                     dataRoom = {
                         "user": USER_INFO,
                         "text": textRef.current
                     }
                     dispatch(chatsSlice.actions.addChat(response));
 
-                    if (chats.length === 0) {
-                        dataRoom.text = textRef.current;
-                        FETCH_POST_ROOM("/rooms/", dataRoom, dispatch);
-                    }
-                    POST_CHAT(dataRoom, roomsselectedRef.current, dispatch)
+                    console.log("Room selected: " + roomsselectedRef.current);
+
+                    if (roomsselectedRef.current === 0) {
+                        const lastestRoom = await FETCH_POST_ROOM("/rooms/", dataRoom, dispatch);
+                        if (lastestRoom) {
+                            console.log("lastestRoom: " + lastestRoom);
+                            POST_CHAT(dataRoom, lastestRoom, dispatch);
+                        }
+                    } else
+                        POST_CHAT(dataRoom, roomsselectedRef.current, dispatch)
                 }
                 else {
                     dispatch(loadingResponseChatSlice.actions.setLoadingResponse(false))
-                    const { user, generate_text, prev_text, stop } = response;
+                    const { user, generate_text, index, stop } = response;
                     const newChat: ChatProps = {
                         user: user,
                         text: ''
                     };
-                    prev_text == textRef.current && dispatch(chatsSlice.actions.addChat(newChat));
+                    index === 0 && dispatch(chatsSlice.actions.addChat(newChat));
                     dispatch(chatsSlice.actions.updateLastChat(generate_text));
                     sentense_generate += generate_text
+
                     if (stop) {
                         dataRoom = {
                             "user": user,
                             "text": sentense_generate
                         }
                         POST_CHAT(dataRoom, roomsselectedRef.current, dispatch)
-                        setText('')
                     }
                 }
             };

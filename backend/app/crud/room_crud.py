@@ -10,8 +10,8 @@ def create_room(db: Session, room: room_schema.RoomCreate):
     db.refresh(db_room)
     return db_room
 
-def get_rooms(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(room_model.Room).offset(skip).limit(limit).all()
+def get_rooms(db: Session):
+    return db.query(room_model.Room).order_by(room_model.Room.id).all()
 
 def get_room(db: Session, room_id: int):
     return db.query(room_model.Room).filter(room_model.Room.id == room_id).first()

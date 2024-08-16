@@ -4,7 +4,6 @@ import { SidebarItem } from "../../model/SidebarItem";
 import {
     SidebarLink,
     SidebarLabel,
-    DropdownLink
 } from './SubmenuStyles'; // Importing the styled-components
 import { useDispatch, useSelector } from 'react-redux';
 import { chatsSlice } from '../../redux/slices/chatsSlice';
@@ -24,10 +23,10 @@ const Submenu: FC<SidebarLinkProps> = ({ item }) => {
 
     const handleOnClick = () => {
         setSubnav(!subnav);
-        if(item.idRoom !== undefined){
+        if (item.idRoom !== undefined) {
             dispatch(roomsSlice.actions.choosedRoom(item.idRoom))
             FETCH_CHATS_BY_ROOM(item.idRoom, dispatch)
-        }else{
+        } else {
             dispatch(roomsSlice.actions.choosedRoom(0))
             dispatch(chatsSlice.actions.loadChats(chats))
         }
@@ -35,20 +34,11 @@ const Submenu: FC<SidebarLinkProps> = ({ item }) => {
 
     return (
         <>
-            <SidebarLink onClick={handleOnClick} className={item.idRoom == roomsselected ? 'selected' : ''}>
+            <SidebarLink onClick={handleOnClick} className={item.idRoom === roomsselected ? 'selected' : ''}>
                 {item.icon}
                 <SidebarLabel>{item.title}</SidebarLabel>
                 <div>{item?.subnav && subnav ? item?.iconOpened : item?.iconClosed}</div>
             </SidebarLink>
-            {/* {subnav &&
-                item?.subnav?.map((subnavItem, index) => {
-                    return (
-                        <DropdownLink to={subnavItem.path} key={index}>
-                            {subnavItem.icon}
-                            <SidebarLabel>{subnavItem.title}</SidebarLabel>
-                        </DropdownLink>
-                    );
-                })} */}
         </>
     );
 };

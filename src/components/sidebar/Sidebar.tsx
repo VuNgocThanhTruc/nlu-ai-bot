@@ -3,7 +3,6 @@ import { IconContext } from 'react-icons';
 import { AiOutlineMenu, AiOutlineMenuFold } from 'react-icons/ai';
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineDarkMode, MdDataObject } from "react-icons/md";
-import { SidebarData } from '../../mock-data/SidebarData';
 import Submenu from './Submenu';
 import imageChatLogo from "../../images/logo.png";
 import {

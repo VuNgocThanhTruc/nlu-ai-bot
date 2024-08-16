@@ -13,8 +13,8 @@ def create_chat(chat: chat_schema.ChatCreate, db: Session = Depends(get_db)):
     return chat_crud.create_chat(db=db, chat=chat)
 
 @router.get("/", response_model=list[chat_schema.Chat])
-def read_chats(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return chat_crud.get_chats(db=db, skip=skip, limit=limit)
+def read_chats(db: Session = Depends(get_db)):
+    return chat_crud.get_chats(db=db)
 
 @router.get("/{chat_id}", response_model=chat_schema.Chat)
 def read_chat(chat_id: int, db: Session = Depends(get_db)):
