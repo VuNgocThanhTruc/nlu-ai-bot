@@ -41,24 +41,20 @@ def load_model():
     # Model
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
-        #Quant type
-        #We will use the "nf4" format this was introduced in the QLoRA paper
         bnb_4bit_quant_type="nf4",
-        #As the model weights are stored using 4 bits and when we want to compute its only going to use 16 bits so we have more accuracy
         bnb_4bit_compute_dtype=torch.float16,
-        #Quantization parameters are quantized
         bnb_4bit_use_double_quant=True,
     )
 
     # Load base moodel
     model = AutoModelForCausalLM.from_pretrained(
         base_model,
-        # device_map=0,
+        quantization_config=bnb_config,
+        device_map="auto",
         trust_remote_code=True,
-        low_cpu_mem_usage=True,
-        torch_dtype=torch.bfloat16,
-        use_cache=False,
     )
+
+    model.config.use_cache = False
 
 @app.get("/")
 def read_root():
@@ -72,11 +68,10 @@ async def websocket_endpoints(ws: WebSocket):
     try:
         while True:
             data = await ws.receive_json()
-            await wsConnection.generate_and_broadcast(model, tokenizer, data)
+            await wsConnection.predict(model, tokenizer, data)
     except WebSocketDisconnect:
         wsConnection.disconnect(ws)
 
 app.include_router(users_router.router, prefix="/users", tags=["users"])
 app.include_router(rooms_router.router, prefix="/rooms", tags=["rooms"])
 app.include_router(chats_router.router, prefix="/chats", tags=["chats"])
-app.include_router(dataset_router.router, prefix="/datasets", tags=["datasets"])

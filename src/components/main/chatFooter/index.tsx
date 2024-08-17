@@ -58,12 +58,9 @@ const ChatFooter = () => {
                     }
                     dispatch(chatsSlice.actions.addChat(response));
 
-                    console.log("Room selected: " + roomsselectedRef.current);
-
                     if (roomsselectedRef.current === 0) {
                         const lastestRoom = await FETCH_POST_ROOM("/rooms/", dataRoom, dispatch);
                         if (lastestRoom) {
-                            console.log("lastestRoom: " + lastestRoom);
                             POST_CHAT(dataRoom, lastestRoom, dispatch);
                         }
                     } else
