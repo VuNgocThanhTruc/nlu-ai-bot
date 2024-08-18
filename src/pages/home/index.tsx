@@ -6,7 +6,7 @@ import { PacmanLoader } from "react-spinners";
 import { CSSProperties } from "styled-components";
 import { FETCH_ROOM } from "../../utils/FetchData";
 import { useDispatch } from "react-redux";
-import CreateDataset from "../../components/createDataset/HomeCreateDataset";
+import './style.css'
 
 const override: CSSProperties = {
     display: "block",
@@ -27,12 +27,12 @@ const Home = () => {
 
     return (
         USER_INFO?.id ?
-            <div className="row" style={{ height: "100vh" }}>
+            <div className="row" style={{ height: "100vh", overflowX: "hidden" }}>
                 <div className="col-3">
                     <Sidebar onToggleComponent={toggleComponent} />
                 </div>
-                <div className="col-9">
-                    {showMainChat ? <MainChat /> : <CreateDataset />}
+                <div className="col-7">
+                    <MainChat />
                 </div>
             </div> :
             <PacmanLoader
