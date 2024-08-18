@@ -1,0 +1,30 @@
+/* style.css */
+body, html {
+    overflow-x: hidden; /* Prevent horizontal scroll globally */
+}
+
+/*.row {*/
+/*    margin-right: 0;*/
+/*    margin-left: 0;*/
+/*}*/
+
+
+/*!* WebKit Browsers (Chrome, Safari, Edge) *!*/
+/*::-webkit-scrollbar {*/
+/*    width: 8px;  !* Narrower scrollbar width *!*/
+/*}*/
+
+/*::-webkit-scrollbar-track {*/
+/*    background: #f1f1f1; !* Light track color *!*/
+/*    border-radius: 10px; !* Rounds the track corners *!*/
+/*}*/
+
+/*::-webkit-scrollbar-thumb {*/
+/*    background-color: #74b636; !* Green thumb color *!*/
+/*    border-radius: 20px; !* Rounds the thumb corners *!*/
+/*    border: 2px solid #f1f1f1; !* Creates a margin between thumb and track *!*/
+/*}*/
+
+/*::-webkit-scrollbar-thumb:hover {*/
+/*    background-color: #5c8d2c; !* Darker thumb on hover *!*/
+/*}*/
